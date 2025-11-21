@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&family=Staatliches&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/normalize.css" />
+    <link rel="stylesheet" href="/css/app.css" />
+    <title>Meeti -</title>
+  </head>
+  <body>
+    <header class="site-header contenedor">
+      <a href="/">
+        <img src="/img/logo.png" alt="Logo" />
+      </a>
+      <nav class="nav">
+        <a href="#">Crear grupo</a>
+        <a href="#">Iniciar sesión</a>
+        <a href="#">Crear cuenta</a>
+      </nav>
+    </header>
+
+    <%- body %>
+
+    <foooter class="site-footer contenedor">
+      <nav class="nav">
+        <a href="#">Crear grupo</a>
+        <a href="#">Iniciar sesión</a>
+        <a href="#">Crear cuenta</a>
+      </nav>
+      <p class="copyright">
+        Todos los derechos reservados Meeti <%- year %> &copy;
+      </p>
+    </foooter>
+  </body>
+</html>
