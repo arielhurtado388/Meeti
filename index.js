@@ -10,6 +10,7 @@ const __dirname = path.dirname(__filename);
 import flash from "connect-flash";
 import session from "express-session";
 import cookieParser from "cookie-parser";
+import passport from "./config/passport.js";
 
 dotenv.config({ path: ".env" });
 
@@ -51,6 +52,10 @@ app.use(
     saveUninitialized: false,
   })
 );
+
+// Inicializar passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Agregar flash messages
 app.use(flash());

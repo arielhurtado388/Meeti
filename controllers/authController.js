@@ -3,6 +3,7 @@ import { confirmarCuenta, recuperarAcceso } from "../helpers/correos.js";
 import Usuario from "../models/Usuario.js";
 import { check, validationResult } from "express-validator";
 import bcrypt from "bcrypt";
+import passport from "passport";
 
 const frmCrearCuenta = (req, res) => {
   res.render("crear-cuenta", {
@@ -70,44 +71,12 @@ const frmIniciarSesion = (req, res) => {
   });
 };
 
-const iniciarSesion = async (req, res) => {
-  await check("correo")
-    .isEmail()
-    .withMessage("El correo es obligatorio")
-    .run(req);
-  await check("password")
-    .notEmpty()
-    .withMessage("La contraseña es obligatoria")
-    .run(req);
-
-  const errores = validationResult(req);
-
-  if (!errores.isEmpty()) {
-    const erroresArray = errores.errors.map((error) => error.msg);
-    req.flash("error", erroresArray);
-    return res.redirect("/iniciar-sesion");
-  }
-
-  const usuario = await Usuario.findOne({
-    where: {
-      correo: req.body.correo,
-      activo: 1,
-    },
-  });
-
-  if (!usuario) {
-    req.flash("error", "El usuario no existe o no está confirmado");
-    return res.redirect("/iniciar-sesion");
-  }
-  const verificarPass = await usuario.validarPass(req.body.password);
-
-  if (!verificarPass) {
-    req.flash("error", "La contraseña es incorrecta");
-    res.redirect("/iniciar-sesion");
-  }
-  req.flash("exito", "Sesion iniciada");
-  res.redirect("/iniciar-sesion");
-};
+const iniciarSesion = passport.authenticate("local", {
+  successRedirect: "/administracion",
+  failureRedirect: "/iniciar-sesion",
+  failureFlash: true,
+  badRequestMessage: "Ambos campos son obligatorios",
+});
 
 const confirmar = async (req, res) => {
   const usuario = await Usuario.findOne({
