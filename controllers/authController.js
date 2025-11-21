@@ -1,5 +1,9 @@
 const frmCrearCuenta = (req, res) => {
-  res.render("crear-cuenta");
+  res.render("crear-cuenta", {
+    pagina: "Crea tu cuenta",
+  });
 };
 
-export { frmCrearCuenta };
+const crearCuenta = async (req, res) => {};
+
+export { frmCrearCuenta, crearCuenta };
