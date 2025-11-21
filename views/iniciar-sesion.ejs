@@ -1,0 +1,19 @@
+<main class="contenedor contenedor-formularios">
+  <h1><%= pagina %></h1>
+
+  <form class="default-form" action="/iniciar-sesion" method="POST" novalidate>
+    <div class="campo">
+      <label>Correo</label>
+      <input type="email" name="correo" placeholder="Tu correo" />
+    </div>
+
+    <div class="campo">
+      <label>Contraseña</label>
+      <input type="password" name="password" placeholder="Tu contraseña" />
+    </div>
+
+    <div class="campo enviar">
+      <input class="btn btn-rosa" type="submit" value="Iniciar sesión" />
+    </div>
+  </form>
+</main>
