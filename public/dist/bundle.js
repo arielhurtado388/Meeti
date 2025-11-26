@@ -16,7 +16,7 @@
   \**************************/
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
 
-eval("{__webpack_require__.r(__webpack_exports__);\n\n\n//# sourceURL=webpack://meeti/./public/js/app.js?\n}");
+eval("{__webpack_require__.r(__webpack_exports__);\nvar map = L.map(\"mapa\").setView([51.505, -0.09], 13);\nL.tileLayer(\"https://tile.openstreetmap.org/{z}/{x}/{y}.png\", {\n  attribution: '&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors'\n}).addTo(map);\nL.marker([51.5, -0.09]).addTo(map).bindPopup(\"A pretty CSS popup.<br> Easily customizable.\").openPopup();\n\n//# sourceURL=webpack://meeti/./public/js/app.js?\n}");
 
 /***/ })
 
