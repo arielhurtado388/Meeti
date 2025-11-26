@@ -15,6 +15,12 @@ import {
 import { panel } from "../controllers/adminController.js";
 import {
   crearGrupo,
+  editarGrupo,
+  editarImagen,
+  eliminarGrupo,
+  frmEditarGrupo,
+  frmEditarImagen,
+  frmEliminarGrupo,
   frmNuevoGrupo,
   subirImagen,
 } from "../controllers/grupoController.js";
@@ -37,5 +43,16 @@ router.post("/olvide/:token", reestablecer);
 router.get("/administracion", usuarioAutenticado, panel);
 router.get("/nuevo-grupo", usuarioAutenticado, frmNuevoGrupo);
 router.post("/nuevo-grupo", usuarioAutenticado, subirImagen, crearGrupo);
+router.get("/editar-grupo/:grupoId", usuarioAutenticado, frmEditarGrupo);
+router.post("/editar-grupo/:grupoId", usuarioAutenticado, editarGrupo);
+router.get("/imagen-grupo/:grupoId", usuarioAutenticado, frmEditarImagen);
+router.post(
+  "/imagen-grupo/:grupoId",
+  usuarioAutenticado,
+  subirImagen,
+  editarImagen
+);
+router.get("/eliminar-grupo/:grupoId", usuarioAutenticado, frmEliminarGrupo);
+router.post("/eliminar-grupo/:grupoId", usuarioAutenticado, eliminarGrupo);
 
 export default router;

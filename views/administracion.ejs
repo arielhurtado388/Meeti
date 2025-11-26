@@ -27,17 +27,29 @@
   </div>
   <div class="seccion-admin">
     <h2>Tus grupos</h2>
+    <% if (grupos.length) { %>
     <ul>
+      <% grupos.forEach(grupo=>{ %>
       <li>
         <div class="informacion-admin">
-          <h3>Devs Ecuador</h3>
+          <h3><%= grupo.nombre %></h3>
         </div>
         <div class="acciones contenedor-botones">
-          <a class="btn btn-verde" href="#">Editar</a>
-          <a class="btn btn-azul" href="#">Imagen</a>
-          <a class="btn btn-rojo" href="#">Eliminar</a>
+          <a class="btn btn-verde" href="/editar-grupo/<%= grupo.id %>"
+            >Editar</a
+          >
+          <a class="btn btn-azul" href="/imagen-grupo/<%= grupo.id %>"
+            >Imagen</a
+          >
+          <a class="btn btn-rojo" href="/eliminar-grupo/<%= grupo.id %>"
+            >Eliminar</a
+          >
         </div>
       </li>
+      <% }) %>
     </ul>
+    <% } else { %>
+    <p>No tienes grupos creados</p>
+    <% } %>
   </div>
 </main>
