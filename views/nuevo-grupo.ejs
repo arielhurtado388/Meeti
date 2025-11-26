@@ -1,6 +1,12 @@
 <main class="contenedor contenedor-formularios no-padding">
   <h1><%= pagina %></h1>
-  <form action="/nuevo-grupo" method="POST" class="default-form" novalidate>
+  <form
+    action="/nuevo-grupo"
+    method="POST"
+    class="default-form"
+    novalidate
+    enctype="multipart/form-data"
+  >
     <div class="campo">
       <label>Nombre</label>
       <input type="text" name="nombre" placeholder="Nombre del grupo" />
