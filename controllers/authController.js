@@ -78,6 +78,14 @@ const iniciarSesion = passport.authenticate("local", {
   badRequestMessage: "Ambos campos son obligatorios",
 });
 
+// Revisa si el usuario esta autenticado o no
+const usuarioAutenticado = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  return res.redirect("/iniciar-sesion");
+};
+
 const confirmar = async (req, res) => {
   const usuario = await Usuario.findOne({
     where: {
@@ -186,6 +194,7 @@ export {
   crearCuenta,
   frmIniciarSesion,
   iniciarSesion,
+  usuarioAutenticado,
   confirmar,
   frmRecuperarPass,
   recuperarPass,
