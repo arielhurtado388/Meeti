@@ -13,6 +13,7 @@ import {
   usuarioAutenticado,
 } from "../controllers/authController.js";
 import { panel } from "../controllers/adminController.js";
+import { crearGrupo, frmNuevoGrupo } from "../controllers/grupoController.js";
 
 const router = express.Router();
 
@@ -29,10 +30,8 @@ router.get("/olvide/:token", frmReestablecer);
 router.post("/olvide/:token", reestablecer);
 
 // Panel de administracion
-router.get(
-  "/administracion",
-  // usuarioAutenticado,
-  panel
-);
+router.get("/administracion", usuarioAutenticado, panel);
+router.get("/nuevo-grupo", usuarioAutenticado, frmNuevoGrupo);
+router.post("/nuevo-grupo", usuarioAutenticado, crearGrupo);
 
 export default router;
