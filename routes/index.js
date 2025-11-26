@@ -24,6 +24,7 @@ import {
   frmNuevoGrupo,
   subirImagen,
 } from "../controllers/grupoController.js";
+import { frmCrearMeeti } from "../controllers/meetiController.js";
 
 const router = express.Router();
 
@@ -41,6 +42,7 @@ router.post("/olvide/:token", reestablecer);
 
 // Panel de administracion
 router.get("/administracion", usuarioAutenticado, panel);
+// Grupos
 router.get("/nuevo-grupo", usuarioAutenticado, frmNuevoGrupo);
 router.post("/nuevo-grupo", usuarioAutenticado, subirImagen, crearGrupo);
 router.get("/editar-grupo/:grupoId", usuarioAutenticado, frmEditarGrupo);
@@ -54,5 +56,8 @@ router.post(
 );
 router.get("/eliminar-grupo/:grupoId", usuarioAutenticado, frmEliminarGrupo);
 router.post("/eliminar-grupo/:grupoId", usuarioAutenticado, eliminarGrupo);
+
+// Meeti's
+router.get("/nuevo-meeti", usuarioAutenticado, frmCrearMeeti);
 
 export default router;
