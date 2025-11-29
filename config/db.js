@@ -5,12 +5,12 @@ dotenv.config({ path: ".env" });
 
 const db = new Sequelize(process.env.DB_URL, {
   dialect: "postgres",
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false,
-    },
-  },
+  // dialectOptions: {
+  //   ssl: {
+  //     require: true,
+  //     rejectUnauthorized: false,
+  //   },
+  // },
   pool: {
     max: 5,
     min: 0,

@@ -24,7 +24,14 @@ import {
   frmNuevoGrupo,
   subirImagen,
 } from "../controllers/grupoController.js";
-import { crearMeeti, frmCrearMeeti } from "../controllers/meetiController.js";
+import {
+  crearMeeti,
+  editarMeeti,
+  eliminarMeeti,
+  frmCrearMeeti,
+  frmEditarMeeti,
+  frmEliminarMeeti,
+} from "../controllers/meetiController.js";
 
 const router = express.Router();
 
@@ -60,5 +67,9 @@ router.post("/eliminar-grupo/:grupoId", usuarioAutenticado, eliminarGrupo);
 // Meeti's
 router.get("/nuevo-meeti", usuarioAutenticado, frmCrearMeeti);
 router.post("/nuevo-meeti", usuarioAutenticado, crearMeeti);
+router.get("/editar-meeti/:id", usuarioAutenticado, frmEditarMeeti);
+router.post("/editar-meeti/:id", usuarioAutenticado, editarMeeti);
+router.get("/eliminar-meeti/:id", usuarioAutenticado, frmEliminarMeeti);
+router.post("/eliminar-meeti/:id", usuarioAutenticado, eliminarMeeti);
 
 export default router;

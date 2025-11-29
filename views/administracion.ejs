@@ -9,22 +9,37 @@
   </div>
 
   <div class="seccion-admin">
-    <h2>Tus meeti's</h2>
+    <h2>Próximos meeti's</h2>
+    <% if (meetis.length) { %>
     <ul>
+      <% meetis.forEach(meeti=>{ %>
       <li>
         <div class="informacion-admin">
-          <p class="fecha">Lunes, 22 de Mayo de 2025</p>
-          <h3>Ecommerce en ecuador</h3>
-          <small>23 asistentes</small>
+          <% moment.locale("es") %> <% const fecha= meeti.fecha + " " +
+          meeti.hora %>
+          <p class="fecha"><%= moment(fecha).format("LLLL") %> Horas</p>
+          <h3><%= meeti.titulo %></h3>
+          <small><%= meeti.interesados.length %> Interesados</small>
         </div>
         <div class="acciones contenedor-botones">
-          <a class="btn btn-verde" href="#">Editar</a>
-          <a class="btn btn-azul" href="#">Asistentes</a>
-          <a class="btn btn-rojo" href="#">Eliminar</a>
+          <a class="btn btn-verde" href="/editar-meeti/<%= meeti.id %>"
+            >Editar</a
+          >
+          <a class="btn btn-azul" href="/asistentes-meeti/<%= meeti.id %>"
+            >Asistentes</a
+          >
+          <a class="btn btn-rojo" href="/eliminar-meeti/<%= meeti.id %>"
+            >Eliminar</a
+          >
         </div>
       </li>
+      <% }) %>
     </ul>
+    <% } else { %>
+    <p>No tienes próximos meeti's</p>
+    <% } %>
   </div>
+
   <div class="seccion-admin">
     <h2>Tus grupos</h2>
     <% if (grupos.length) { %>
@@ -50,6 +65,38 @@
     </ul>
     <% } else { %>
     <p>No tienes grupos creados</p>
+    <% } %>
+  </div>
+
+  <div class="seccion-admin">
+    <h2>Anteriores meeti's</h2>
+    <% if (anterioresMeetis.length) { %>
+    <ul>
+      <% anterioresMeetis.forEach(anterior=>{ %>
+      <li>
+        <div class="informacion-admin">
+          <% moment.locale("es") %> <% const fecha= anterior.fecha + " " +
+          anterior.hora %>
+          <p class="fecha"><%= moment(fecha).format("LLLL") %> Horas</p>
+          <h3><%= anterior.titulo %></h3>
+          <small><%= anterior.interesados.length %> Interesados</small>
+        </div>
+        <div class="acciones contenedor-botones">
+          <a class="btn btn-verde" href="/editar-meeti/<%= anterior.id %>"
+            >Editar</a
+          >
+          <a class="btn btn-azul" href="/asistentes-meeti/<%= anterior.id %>"
+            >Asistentes</a
+          >
+          <a class="btn btn-rojo" href="/eliminar-meeti/<%= anterior.id %>"
+            >Eliminar</a
+          >
+        </div>
+      </li>
+      <% }) %>
+    </ul>
+    <% } else { %>
+    <p>No tienes anteriores meeti's</p>
     <% } %>
   </div>
 </main>
