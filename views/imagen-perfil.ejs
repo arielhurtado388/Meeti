@@ -1,0 +1,31 @@
+<main class="contenedor contenedor-formularios">
+  <h1><%= pagina %></h1>
+  <form
+    method="POST"
+    class="default-form"
+    novalidate
+    enctype="multipart/form-data"
+  >
+    <legend>
+      Sube tu imagen que se mostrará junto a tu nombre y biografía
+    </legend>
+
+    <div class="campo">
+      <label>Imagen</label>
+      <input type="file" name="imagen" />
+    </div>
+
+    <% if (usuario.imagen) { %>
+    <div class="campo">
+      <label>Imagen actual</label>
+      <img src="/uploads/perfiles/<%= usuario.imagen %>" width="400" />
+    </div>
+    <% }else{ %>
+    <p>No hay imagen actual</p>
+    <% } %>
+
+    <div class="campo enviar">
+      <input class="btn btn-rosa" type="submit" value="Subir imagen" />
+    </div>
+  </form>
+</main>

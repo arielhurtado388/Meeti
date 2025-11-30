@@ -4,6 +4,52 @@ import Usuario from "../models/Usuario.js";
 import { check, validationResult } from "express-validator";
 import bcrypt from "bcrypt";
 import passport from "passport";
+import multer from "multer";
+import path from "path";
+import { fileURLToPath } from "url";
+import { unlink } from "fs";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const configuracionmulter = {
+  limits: { fileSize: 100000 },
+  storage: multer.diskStorage({
+    destination: (req, file, next) => {
+      next(null, __dirname + "/../public/uploads/perfiles");
+    },
+    filename: (req, file, next) => {
+      const extension = file.mimetype.split("/")[1];
+      next(null, `${shortid.generate()}.${extension}`);
+    },
+  }),
+  fileFilter: (req, file, next) => {
+    if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+      next(null, true);
+    } else {
+      next(new Error("Formato no válido"), false);
+    }
+  },
+};
+const upload = multer(configuracionmulter).single("imagen");
+
+const subirImagenPerfil = (req, res, next) => {
+  upload(req, res, function (error) {
+    if (error) {
+      if (error instanceof multer.MulterError) {
+        if (error.code === "LIMIT_FILE_SIZE") {
+          req.flash("error", "El archivo es muy grande");
+        } else {
+          req.flash("error", error.message);
+        }
+      } else if (error.hasOwnProperty("message")) {
+        req.flash("error", error.message);
+      }
+      return res.redirect("/nuevo-grupo");
+    } else {
+      next();
+    }
+  });
+};
 
 const frmCrearCuenta = (req, res) => {
   res.render("crear-cuenta", {
@@ -189,6 +235,137 @@ const reestablecer = async (req, res) => {
   return res.redirect("/iniciar-sesion");
 };
 
+const frmEditarPerfil = async (req, res) => {
+  const usuario = await Usuario.findByPk(req.user.id);
+
+  res.render("editar-perfil", {
+    pagina: "Editar perfil",
+    usuario,
+  });
+};
+
+const editarPerfil = async (req, res) => {
+  await check("nombre")
+    .notEmpty()
+    .withMessage("El nombre es obligatorio")
+    .run(req);
+  await check("correo")
+    .isEmail()
+    .withMessage("El correo no es válido")
+    .run(req);
+  await check("descripcion")
+    .isLength({ min: 10, max: 1500 })
+    .withMessage("La descripción debe tener entre 10 y 1500 caracteres")
+    .run(req);
+
+  const errores = validationResult(req);
+
+  if (!errores.isEmpty()) {
+    const erroresArray = errores.errors.map((error) => error.msg);
+    req.flash("error", erroresArray);
+    return res.redirect("/editar-perfil");
+  }
+
+  const usuario = await Usuario.findByPk(req.user.id);
+  const { nombre, descripcion, correo } = req.body;
+  usuario.nombre = nombre;
+  usuario.descripcion = descripcion;
+  usuario.correo = correo;
+
+  await usuario.save();
+  req.flash("exito", "Cambios guardados correctamente");
+  res.redirect("/administracion");
+};
+
+const frmCambiarPassword = (req, res) => {
+  res.render("cambiar-password", {
+    pagina: "Cambiar contraseña",
+  });
+};
+const cambiarPassword = async (req, res) => {
+  await check("anterior")
+    .notEmpty()
+    .withMessage("La contraseña anterior es obligatoria")
+    .run(req);
+  await check("nuevo")
+    .notEmpty()
+    .withMessage("La contraseña nueva es obligatoria")
+    .run(req);
+
+  const errores = validationResult(req);
+
+  if (!errores.isEmpty()) {
+    const erroresArray = errores.errors.map((error) => error.msg);
+    req.flash("error", erroresArray);
+    return res.redirect("/cambiar-password");
+  }
+
+  const usuario = await Usuario.findByPk(req.user.id);
+
+  // Verificar si el anterior es correcto
+  const verificarPass = await usuario.validarPass(req.body.anterior);
+
+  if (!verificarPass) {
+    req.flash("error", "La contraseña anterior es incorrecta");
+    return res.redirect("/cambiar-password");
+  }
+
+  // Si es correcto hashear el nuevo  asignarlo
+  const hash = await usuario.hashPass(req.body.nuevo);
+  usuario.password = hash;
+
+  // Guardar los cambios y redireccionar
+  await usuario.save();
+
+  req.logout(req.user, (err) => {
+    if (err) return next(err);
+    req.flash(
+      "exito",
+      "Cambios guardados correctamente, vuelve a iniciar sesión"
+    );
+    res.redirect("/iniciar-sesion");
+  });
+};
+
+const frmImagenPerfil = async (req, res) => {
+  const usuario = await Usuario.findByPk(req.user.id);
+
+  res.render("imagen-perfil", {
+    pagina: "Subir imagen de perfil",
+    usuario,
+  });
+};
+const imagenPerfil = async (req, res) => {
+  const usuario = await Usuario.findByPk(req.user.id);
+
+  if (req.file && usuario.imagen) {
+    const imagenAnteriorPath =
+      __dirname + `/../public/uploads/perfiles/${usuario.imagen}`;
+    unlink(imagenAnteriorPath, (error) => {
+      if (error) {
+        console.log(error);
+      }
+      return;
+    });
+  }
+
+  if (req.file) {
+    usuario.imagen = req.file.filename;
+  }
+
+  await usuario.save();
+  req.flash("exito", "Cambios guardados correctamente");
+  res.redirect("/administracion");
+};
+
+const cerrarSesion = (req, res) => {
+  req.logout(req.user, (err) => {
+    if (err) return next(err);
+    req.flash("exito", "Sesión cerrada correctamente, vuelve a iniciar sesión");
+    res.redirect("/iniciar-sesion");
+  });
+};
+
 export {
   frmCrearCuenta,
   crearCuenta,
@@ -200,4 +377,12 @@ export {
   recuperarPass,
   frmReestablecer,
   reestablecer,
+  frmEditarPerfil,
+  editarPerfil,
+  frmCambiarPassword,
+  cambiarPassword,
+  frmImagenPerfil,
+  subirImagenPerfil,
+  imagenPerfil,
+  cerrarSesion,
 };

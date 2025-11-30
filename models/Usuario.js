@@ -7,6 +7,7 @@ const Usuario = db.define(
   {
     nombre: Sequelize.STRING(60),
     imagen: Sequelize.STRING(60),
+    descripcion: Sequelize.TEXT,
     correo: {
       type: Sequelize.STRING(60),
       allowNull: false,
@@ -27,8 +28,7 @@ const Usuario = db.define(
     hooks: {
       // Hook async - mejor rendimiento
       beforeCreate: async (usuario) => {
-        const salt = await bcrypt.genSalt(10);
-        usuario.password = await bcrypt.hash(usuario.password, salt);
+        usuario.password = Usuario.prototype.hashPass(usuario.password);
       },
     },
   }
@@ -37,6 +37,10 @@ const Usuario = db.define(
 // Método async para comparar passwords
 Usuario.prototype.validarPass = async function (password) {
   return await bcrypt.compare(password, this.password);
+};
+Usuario.prototype.hashPass = async function (password) {
+  const salt = await bcrypt.genSalt(10);
+  return await bcrypt.hash(password, salt);
 };
 
 export default Usuario;

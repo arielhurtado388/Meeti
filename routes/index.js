@@ -1,15 +1,23 @@
 import express from "express";
 import { home } from "../controllers/homeController.js";
 import {
+  cambiarPassword,
+  cerrarSesion,
   confirmar,
   crearCuenta,
+  editarPerfil,
+  frmCambiarPassword,
   frmCrearCuenta,
+  frmEditarPerfil,
+  frmImagenPerfil,
   frmIniciarSesion,
   frmRecuperarPass,
   frmReestablecer,
+  imagenPerfil,
   iniciarSesion,
   recuperarPass,
   reestablecer,
+  subirImagenPerfil,
   usuarioAutenticado,
 } from "../controllers/authController.js";
 import { panel } from "../controllers/adminController.js";
@@ -46,6 +54,7 @@ router.get("/olvide", frmRecuperarPass);
 router.post("/olvide", recuperarPass);
 router.get("/olvide/:token", frmReestablecer);
 router.post("/olvide/:token", reestablecer);
+router.get("/cerrar-sesion", usuarioAutenticado, cerrarSesion);
 
 // Panel de administracion
 router.get("/administracion", usuarioAutenticado, panel);
@@ -71,5 +80,22 @@ router.get("/editar-meeti/:id", usuarioAutenticado, frmEditarMeeti);
 router.post("/editar-meeti/:id", usuarioAutenticado, editarMeeti);
 router.get("/eliminar-meeti/:id", usuarioAutenticado, frmEliminarMeeti);
 router.post("/eliminar-meeti/:id", usuarioAutenticado, eliminarMeeti);
+
+// Editar perfil
+router.get("/editar-perfil", usuarioAutenticado, frmEditarPerfil);
+router.post("/editar-perfil", usuarioAutenticado, editarPerfil);
+
+// Cambiar password
+router.get("/cambiar-password", usuarioAutenticado, frmCambiarPassword);
+router.post("/cambiar-password", usuarioAutenticado, cambiarPassword);
+
+// Imagen perfil
+router.get("/imagen-perfil", usuarioAutenticado, frmImagenPerfil);
+router.post(
+  "/imagen-perfil",
+  usuarioAutenticado,
+  subirImagenPerfil,
+  imagenPerfil
+);
 
 export default router;
