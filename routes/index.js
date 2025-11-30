@@ -43,7 +43,10 @@ import {
 
 const router = express.Router();
 
+// Area publica
 router.get("/", home);
+
+// Area Privada
 // Auth
 router.get("/crear-cuenta", frmCrearCuenta);
 router.post("/crear-cuenta", crearCuenta);

@@ -18,6 +18,7 @@ const panel = async (req, res) => {
           [Op.gte]: fechaACtual,
         },
       },
+      order: [["fecha", "DESC"]],
     }),
     Meeti.findAll({
       where: {
