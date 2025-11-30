@@ -43,6 +43,7 @@ import {
 import {
   confirmarAsistencia,
   mostrarAsistentes,
+  mostrarGrupo,
   mostrarMeeti,
   mostrarUsuario,
 } from "../controllers/frontend/meetiController.js";
@@ -55,6 +56,7 @@ router.get("/meeti/:slug", mostrarMeeti);
 router.post("/confirmar-asistencia/:slug", confirmarAsistencia);
 router.get("/asistentes/:slug", mostrarAsistentes);
 router.get("/usuarios/:id", mostrarUsuario);
+router.get("/grupos/:id", mostrarGrupo);
 
 // Area Privada
 // Auth

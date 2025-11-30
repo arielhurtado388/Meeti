@@ -110,4 +110,37 @@ const mostrarUsuario = async (req, res) => {
   });
 };
 
-export { mostrarMeeti, confirmarAsistencia, mostrarAsistentes, mostrarUsuario };
+const mostrarGrupo = async (req, res) => {
+  const [grupo, meetis] = await Promise.all([
+    Grupo.findOne({
+      where: {
+        id: req.params.id,
+      },
+    }),
+    Meeti.findAll({
+      where: {
+        grupoId: req.params.id,
+      },
+      order: [["fecha", "ASC"]],
+    }),
+  ]);
+
+  if (!grupo) {
+    return res.redirect("/");
+  }
+
+  res.render("mostrar-grupo", {
+    pagina: `Información del grupo: ${grupo.nombre}`,
+    grupo,
+    meetis,
+    moment,
+  });
+};
+
+export {
+  mostrarMeeti,
+  confirmarAsistencia,
+  mostrarAsistentes,
+  mostrarUsuario,
+  mostrarGrupo,
+};

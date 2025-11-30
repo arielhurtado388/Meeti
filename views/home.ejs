@@ -26,7 +26,12 @@
   <div class="grid columnas-md-3">
     <% if(meetis.length > 0){ %> <% meetis.forEach(meeti=>{ %>
     <div class="card">
+      <% if(meeti.grupo.imagen) { %>
       <img src="/uploads/grupos/<%= meeti.grupo.imagen%>" />
+      <% } else { %>
+      <img src="/img/logo.png" />
+      <% } %>
+
       <div class="card-texto">
         <% moment.locale("es") %> <% const fecha = meeti.fecha + " " +
         meeti.hora %>
