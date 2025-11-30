@@ -40,11 +40,13 @@ import {
   frmEditarMeeti,
   frmEliminarMeeti,
 } from "../controllers/meetiController.js";
+import { mostrarMeeti } from "../controllers/frontend/meetiController.js";
 
 const router = express.Router();
 
 // Area publica
 router.get("/", home);
+router.get("/meeti/:slug", mostrarMeeti);
 
 // Area Privada
 // Auth

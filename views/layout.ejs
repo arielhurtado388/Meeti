@@ -57,6 +57,9 @@
     <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
     <script src="https://unpkg.com/esri-leaflet@3.0.8/dist/esri-leaflet.js"></script>
     <script src="https://unpkg.com/esri-leaflet-geocoder@2.2.13/dist/esri-leaflet-geocoder.js"></script>
+    <% if(usuario.id) { %>
     <script src="/dist/bundle.js"></script>
+    <% } %>
+    <script src="/js/meeti.js"></script>
   </body>
 </html>
