@@ -43,6 +43,7 @@ import {
 import {
   confirmarAsistencia,
   mostrarAsistentes,
+  mostrarCategoria,
   mostrarGrupo,
   mostrarMeeti,
   mostrarUsuario,
@@ -57,6 +58,7 @@ router.post("/confirmar-asistencia/:slug", confirmarAsistencia);
 router.get("/asistentes/:slug", mostrarAsistentes);
 router.get("/usuarios/:id", mostrarUsuario);
 router.get("/grupos/:id", mostrarGrupo);
+router.get("/categoria/:slug", mostrarCategoria);
 
 // Area Privada
 // Auth

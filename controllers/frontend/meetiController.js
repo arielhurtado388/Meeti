@@ -3,6 +3,7 @@ import Grupo from "../../models/Grupo.js";
 import Meeti from "../../models/Meeti.js";
 import Usuario from "../../models/Usuario.js";
 import { Sequelize } from "sequelize";
+import Categoria from "../../models/Categoria.js";
 
 const mostrarMeeti = async (req, res) => {
   const meeti = await Meeti.findOne({
@@ -137,10 +138,48 @@ const mostrarGrupo = async (req, res) => {
   });
 };
 
+const mostrarCategoria = async (req, res) => {
+  const categoria = await Categoria.findOne({
+    where: {
+      slug: req.params.slug,
+    },
+    attributes: ["id", "nombre"],
+  });
+
+  const meetis = await Meeti.findAll({
+    order: [
+      ["fecha", "ASC"],
+      ["hora", "ASC"],
+    ],
+    include: [
+      {
+        model: Grupo,
+        where: {
+          categoriaId: categoria.id,
+        },
+      },
+      {
+        model: Usuario,
+      },
+    ],
+  });
+
+  if (!categoria) {
+    return res.redirect("/");
+  }
+
+  res.render("categoria", {
+    pagina: `Categoría: ${categoria.nombre}`,
+    meetis,
+    moment,
+  });
+};
+
 export {
   mostrarMeeti,
   confirmarAsistencia,
   mostrarAsistentes,
   mostrarUsuario,
   mostrarGrupo,
+  mostrarCategoria,
 };
