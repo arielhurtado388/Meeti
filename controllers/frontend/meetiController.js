@@ -86,4 +86,28 @@ const mostrarAsistentes = async (req, res) => {
   });
 };
 
-export { mostrarMeeti, confirmarAsistencia, mostrarAsistentes };
+const mostrarUsuario = async (req, res) => {
+  const [usuario, grupos] = await Promise.all([
+    Usuario.findOne({
+      where: {
+        id: req.params.id,
+      },
+    }),
+    Grupo.findAll({
+      where: {
+        usuarioId: req.params.id,
+      },
+    }),
+  ]);
+  if (!usuario) {
+    return res.redirect("/");
+  }
+
+  res.render("mostrar-perfil", {
+    pagina: `Perfil: ${usuario.nombre}`,
+    usuario,
+    grupos,
+  });
+};
+
+export { mostrarMeeti, confirmarAsistencia, mostrarAsistentes, mostrarUsuario };

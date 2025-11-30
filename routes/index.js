@@ -44,6 +44,7 @@ import {
   confirmarAsistencia,
   mostrarAsistentes,
   mostrarMeeti,
+  mostrarUsuario,
 } from "../controllers/frontend/meetiController.js";
 
 const router = express.Router();
@@ -53,6 +54,7 @@ router.get("/", home);
 router.get("/meeti/:slug", mostrarMeeti);
 router.post("/confirmar-asistencia/:slug", confirmarAsistencia);
 router.get("/asistentes/:slug", mostrarAsistentes);
+router.get("/usuarios/:id", mostrarUsuario);
 
 // Area Privada
 // Auth
