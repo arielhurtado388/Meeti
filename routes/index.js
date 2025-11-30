@@ -42,6 +42,8 @@ import {
 } from "../controllers/meetiController.js";
 import {
   confirmarAsistencia,
+  eliminarComentario,
+  guardarComentario,
   mostrarAsistentes,
   mostrarCategoria,
   mostrarGrupo,
@@ -54,6 +56,8 @@ const router = express.Router();
 // Area publica
 router.get("/", home);
 router.get("/meeti/:slug", mostrarMeeti);
+router.post("/meeti/:slug", guardarComentario);
+router.post("/eliminar-comentario", eliminarComentario);
 router.post("/confirmar-asistencia/:slug", confirmarAsistencia);
 router.get("/asistentes/:slug", mostrarAsistentes);
 router.get("/usuarios/:id", mostrarUsuario);

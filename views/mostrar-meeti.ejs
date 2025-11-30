@@ -71,24 +71,46 @@
 
       <div class="comentarios">
         <h2>Comentarios</h2>
+        <% if(comentarios.length > 0) { %> <% comentarios.forEach(comentario=>{
+        %>
         <div class="comentario">
+          <% if(comentario.usuario.imagen) {%>
+          <div class="imagen">
+            <img src="/uploads/perfiles/<%= comentario.usuario.imagen %>" />
+          </div>
+          <% } else { %>
           <div class="imagen"></div>
+          <% } %>
           <div class="texto">
-            <p>Hola</p>
-            <p>Escrito por: <span>Ariel Hurtado</span></p>
-            <input type="button" value="Eliminar" class="btn btn-azul" />
+            <p><%= comentario.mensaje %></p>
+            <p>
+              Escrito por:
+              <a href="/usuarios/<%= comentario.usuario.id %>">
+                <%= comentario.usuario.nombre %>
+              </a>
+            </p>
+
+            <% if(comentario.usuarioId === usuario.id || meeti.usuarioId ===
+            usuario.id) { %>
+            <form
+              action="/eliminar-comentario"
+              method="POST"
+              class="eliminar-comentario"
+            >
+              <input
+                type="hidden"
+                name="idComentario"
+                value="<%= comentario.id %>"
+              />
+              <input type="submit" value="Eliminar" class="btn btn-azul" />
+            </form>
+            <% } %>
           </div>
         </div>
-
-        <div class="comentario">
-          <div class="imagen"></div>
-          <div class="texto">
-            <p>Hola</p>
-            <p>Escrito por: <span>Ariel Hurtado</span></p>
-          </div>
-        </div>
-
-        <form action="" class="default-form comentarios">
+        <% }) %> <% } else { %>
+        <p>No hay comentarios aún</p>
+        <% } %> <% if(usuario.id) { %>
+        <form method="POST" class="default-form comentarios">
           <legend>Agrega un comentario</legend>
           <div class="campo">
             <label>Comentario</label>
@@ -98,6 +120,9 @@
             <input type="submit" value="Enviar" class="btn btn-rosa" />
           </div>
         </form>
+        <% } else { %>
+        <p>Inicia sesión para agregar un comentario</p>
+        <% } %>
       </div>
     </div>
 
