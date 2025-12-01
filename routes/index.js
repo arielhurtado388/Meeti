@@ -45,6 +45,7 @@ import {
   eliminarComentario,
   guardarComentario,
   mostrarAsistentes,
+  mostrarBusqueda,
   mostrarCategoria,
   mostrarGrupo,
   mostrarMeeti,
@@ -63,6 +64,7 @@ router.get("/asistentes/:slug", mostrarAsistentes);
 router.get("/usuarios/:id", mostrarUsuario);
 router.get("/grupos/:id", mostrarGrupo);
 router.get("/categoria/:slug", mostrarCategoria);
+router.get("/busqueda", mostrarBusqueda);
 
 // Area Privada
 // Auth

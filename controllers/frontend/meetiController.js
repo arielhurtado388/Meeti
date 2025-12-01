@@ -284,6 +284,44 @@ const eliminarComentario = async (req, res) => {
   res.status(200).send("Comentario eliminado correctamente");
 };
 
+const mostrarBusqueda = async (req, res) => {
+  const { categoria, titulo, ciudad, pais } = req.query;
+
+  let query;
+
+  if (categoria === "") {
+    query = "";
+  } else {
+    query = `where: {
+          categoriaId: { [Op.eq]: ${categoria} },
+        },`;
+  }
+
+  const meetis = await Meeti.findAll({
+    where: {
+      titulo: { [Op.iLike]: "%" + titulo + "%" },
+      ciudad: { [Op.iLike]: "%" + ciudad + "%" },
+      pais: { [Op.iLike]: "%" + pais + "%" },
+    },
+    include: [
+      {
+        model: Grupo,
+        query,
+      },
+      {
+        model: Usuario,
+        attributes: ["id", "nombre", "imagen"],
+      },
+    ],
+  });
+
+  res.render("busqueda", {
+    pagina: `Resultados de la búsqueda`,
+    meetis,
+    moment,
+  });
+};
+
 export {
   mostrarMeeti,
   confirmarAsistencia,
@@ -293,4 +331,5 @@ export {
   mostrarCategoria,
   guardarComentario,
   eliminarComentario,
+  mostrarBusqueda,
 };
