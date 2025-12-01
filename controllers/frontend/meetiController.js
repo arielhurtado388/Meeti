@@ -2,7 +2,7 @@ import moment from "moment";
 import Grupo from "../../models/Grupo.js";
 import Meeti from "../../models/Meeti.js";
 import Usuario from "../../models/Usuario.js";
-import { Sequelize } from "sequelize";
+import { Op, Sequelize } from "sequelize";
 import Categoria from "../../models/Categoria.js";
 import { check, validationResult } from "express-validator";
 import Comentario from "../../models/Comentario.js";
@@ -27,6 +27,34 @@ const mostrarMeeti = async (req, res) => {
     res.redirect("/");
   }
 
+  // Consultar meetis cercanos
+  const ubicacion = Sequelize.literal(
+    `ST_GeomFromText('POINT (${meeti.ubicacion.coordinates[0]} ${meeti.ubicacion.coordinates[1]})')`
+  );
+
+  const distancia = Sequelize.fn(
+    "ST_DistanceSphere",
+    Sequelize.col("ubicacion"),
+    ubicacion
+  );
+
+  // Meeti's cercanos
+  const cercanos = await Meeti.findAll({
+    order: distancia, // Del mas cercano al mas lejano
+    where: Sequelize.where(distancia, { [Op.lte]: 2000 }), // A maximo 2km
+    limit: 3,
+    offset: 1,
+    include: [
+      {
+        model: Grupo,
+      },
+      {
+        model: Usuario,
+        attributes: ["id", "nombre", "imagen"],
+      },
+    ],
+  });
+
   const comentarios = await Comentario.findAll({
     where: {
       meetiId: meeti.id,
@@ -43,6 +71,7 @@ const mostrarMeeti = async (req, res) => {
     pagina: meeti.titulo,
     meeti,
     comentarios,
+    cercanos,
     moment,
   });
 };
